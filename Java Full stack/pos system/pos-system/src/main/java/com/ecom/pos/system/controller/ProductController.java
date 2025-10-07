@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductDto> update(,@PathVariable Long id,@RequestBody ProductDto productDto, @RequestHeader("Authorization")String jwt) throws Exception {
+    public ResponseEntity<ProductDto> update(@PathVariable Long id,@RequestBody ProductDto productDto, @RequestHeader("Authorization")String jwt) throws Exception {
         User user= userService.getUserFromJwtToken(jwt);
 
         return ResponseEntity.ok(productService.updateProduct(id,productDto, user));
@@ -49,7 +49,7 @@ public class ProductController {
     }
 
     @GetMapping("/store/{storeId}/search")
-    public ResponseEntity<List<ProductDto>>  searchByKeyword(@PathVariable Long storeId,@@RequestParam String keyword ,@RequestHeader("Authorization")String jwt) throws Exception {
+    public ResponseEntity<List<ProductDto>>  searchByKeyword(@PathVariable Long storeId,@RequestParam String keyword ,@RequestHeader("Authorization")String jwt) throws Exception {
         return ResponseEntity.ok(productService.searchByKeyword(storeId,keyword));
     }
 

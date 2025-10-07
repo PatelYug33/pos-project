@@ -32,7 +32,10 @@ public class Product {
     private Double sellingPrice;
     private String brand;
     private  String image;
-//    private  Category category;
+
+    @ManyToOne
+    private  Category category;
+
     @ManyToOne
     private Store store;
     private LocalDateTime createdAt;
@@ -46,7 +49,5 @@ public class Product {
     protected void onUpdate(){
         updatedAt = LocalDateTime.now();
     }
-
-
 
 }

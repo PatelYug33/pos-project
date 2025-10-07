@@ -1,5 +1,6 @@
 package com.ecom.pos.system.mapper;
 
+import com.ecom.pos.system.model.Category;
 import com.ecom.pos.system.model.Product;
 import com.ecom.pos.system.model.Store;
 import com.ecom.pos.system.payload.dto.ProductDto;
@@ -15,6 +16,7 @@ public class ProductMapper {
                 .mrp(product.getMrp())
                 .sellingPrice(product.getSellingPrice())
                 .brand(product.getBrand())
+                .category(CategoryMapper.toDto(product.getCategory()))
                 .storeId(product.getStore() != null ? product.getStore().getId():null)
                 .image(product.getImage())
                 .createdAt(product.getCreatedAt())
@@ -23,9 +25,11 @@ public class ProductMapper {
 
     }
 
-    public static Product toEntity(ProductDto productDto, Store store){
+    public static Product toEntity(ProductDto productDto, Store store, Category category){
         return Product.builder()
                 .name(productDto.getName())
+                .store(store)
+                .category(category)
                 .sku(productDto.getSku())
                 .description(productDto.getDescription())
                 .mrp(productDto.getMrp())

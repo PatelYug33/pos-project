@@ -1,10 +1,12 @@
 package com.ecom.pos.system.service.impl;
 
 import com.ecom.pos.system.mapper.ProductMapper;
+import com.ecom.pos.system.model.Category;
 import com.ecom.pos.system.model.Product;
 import com.ecom.pos.system.model.Store;
 import com.ecom.pos.system.model.User;
 import com.ecom.pos.system.payload.dto.ProductDto;
+import com.ecom.pos.system.repository.CategoryRepository;
 import com.ecom.pos.system.repository.ProductRepository;
 import com.ecom.pos.system.repository.StoreRepository;
 import com.ecom.pos.system.service.ProductService;
@@ -21,12 +23,14 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final StoreRepository storeRepository;
-
+    private final CategoryRepository categoryRepository;
 
     @Override
     public ProductDto createProduct(ProductDto productDto, User user) throws Exception {
-        Store store= storeRepository.findById(productDto.getStoreId()).orElseThrow(()->new Exception("Store not found !"));
-        Product product = ProductMapper.toEntity(productDto,store);
+        Store store= storeRepository.findById(productDto.getStoreId()).orElseThrow(()->new Exception("Store not found"));
+
+        Category category = categoryRepository.findById(productDto.getCategoryId()).orElseThrow(()->new Exception("category not found"));
+        Product product = ProductMapper.toEntity(productDto,store,category);
         Product savedProduct=productRepository.save(product);
 
         return ProductMapper.toDto(savedProduct);
@@ -35,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto updateProduct(Long id, ProductDto productDto, User user) throws Exception {
         Product product =productRepository.findById(id).orElseThrow(()->new Exception("Product not found"));
+
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setSku(productDto.getSku());
@@ -44,6 +49,11 @@ public class ProductServiceImpl implements ProductService {
         product.setBrand(productDto.getBrand());
         product.setUpdatedAt(LocalDateTime.now());
 
+
+        if(productDto.getCategoryId()!=null) {
+            Category category = categoryRepository.findById(productDto.getCategoryId()).orElseThrow(() -> new Exception("category not found"));
+            product.setCategory(category);
+        }
         Product savedProduct= productRepository.save(product);
         return ProductMapper.toDto(savedProduct);
     }
