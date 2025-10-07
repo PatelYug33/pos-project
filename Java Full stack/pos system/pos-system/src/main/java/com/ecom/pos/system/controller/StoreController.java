@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/store")
+@RequestMapping("/api/stores")
 @RequiredArgsConstructor
 public class StoreController {
 
@@ -32,19 +32,19 @@ public class StoreController {
 
 
     @GetMapping
-    public ResponseEntity<List<StoreDto>> getAllStore(@RequestBody Long id,
+    public ResponseEntity<List<StoreDto>> getAllStore(@RequestParam Long id,
                                                      @RequestHeader("Authorization")String jwt) throws Exception {
         return ResponseEntity.ok(storeService.getAllStores());
     }
 
     @GetMapping("admin")
-    public ResponseEntity<StoreDto> getStoreByAdmin(@RequestBody Long id,
+    public ResponseEntity<StoreDto> getStoreByAdmin(@RequestParam Long id,
                                                       @RequestHeader("Authorization")String jwt) throws Exception {
         return ResponseEntity.ok(StoreMapper.toDto(storeService.getStoreByAdmin()));
     }
 
     @GetMapping("employee")
-    public ResponseEntity<StoreDto> getStoreByEmployee(@RequestBody Long id,
+    public ResponseEntity<StoreDto> getStoreByEmployee(@RequestParam Long id,
                                                     @RequestHeader("Authorization")String jwt) throws Exception {
         return ResponseEntity.ok(storeService.getStoreByEmployee());
     }
